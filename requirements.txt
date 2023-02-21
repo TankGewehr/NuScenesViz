@@ -1,0 +1,16 @@
+matplotlib==3.3.4
+numpy==1.19.5
+nuscenes-devkit==1.1.5
+opencv-python==3.4.9.31
+PyQt5==5.15.4
+pyqt5-plugins==5.15.4.2.2
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.9.0
+pyqt5-tools==5.15.4.3.2
+qt5-applications==5.15.2.2.2
+qt5-tools==5.15.2.1.2
+pyquaternion==0.9.9
+qtconsole==5.1.0
+QtPy==1.9.0
+scikit-learn==0.24.2
+tqdm==4.61.1
