@@ -35,6 +35,7 @@ class Form(QWidget,Ui_form):
 
     def show_img(self):
         self.sample=self.nusc.sample[self.num-1]
+        print(self.sample['token'])
         
         img_name=time.strftime('%H%M%S')+'.jpg'
         out_path=self.img_cache_path+'/'+img_name
