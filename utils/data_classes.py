@@ -258,11 +258,13 @@ class LidarPointCloud(PointCloud):
                 point_list=[]
                 for _ in range(11):
                     pcd_file.readline()
-                pcd=pcd_file.readlines()
-                for pcd_line in pcd:
-                    pcd_line=pcd_line.split(" ")
-                    point_list.append([float(pcd_line[0]),float(pcd_line[1]),float(pcd_line[2]),float(pcd_line[3][:-1])])
-            points=np.array(point_list)
+                pcd_line=pcd_file.readline().strip()
+                while pcd_line:
+                    point_str=pcd_line.split(" ")
+                    point=list(map(float,point_str))
+                    point_list.append(point)
+                    pcd_line=pcd_file.readline().strip()
+            points=np.array(point_list)[:,:cls.nbr_dims()]
             # points=np.insert(np.asarray(open3d.io.read_point_cloud(file_name).points),3,np.array([0]),axis=1)
 
         return cls(points.T)
