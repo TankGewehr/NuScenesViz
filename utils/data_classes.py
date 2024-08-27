@@ -13,8 +13,10 @@ import numpy as np
 from matplotlib.axes import Axes
 from pyquaternion import Quaternion
 
+from nuscenes import NuScenes
 from nuscenes.utils.geometry_utils import view_points, transform_matrix
 
+from include.utils.pcd import loadPCD
 
 class PointCloud(ABC):
     """
@@ -54,7 +56,7 @@ class PointCloud(ABC):
 
     @classmethod
     def from_file_multisweep(cls,
-                             nusc: 'NuScenes',
+                             nusc: NuScenes,
                              sample_rec: Dict,
                              chan: str,
                              ref_chan: str,
@@ -254,17 +256,7 @@ class LidarPointCloud(PointCloud):
             scan = np.fromfile(file_name, dtype=np.float32)
             points = scan.reshape((-1, 4))[:, :cls.nbr_dims()]
         elif file_name.endswith('.pcd'):
-            with open(file_name) as pcd_file:
-                point_list=[]
-                for _ in range(11):
-                    pcd_file.readline()
-                pcd_line=pcd_file.readline().strip()
-                while pcd_line:
-                    point_str=pcd_line.split(" ")
-                    point=list(map(float,point_str))
-                    point_list.append(point)
-                    pcd_line=pcd_file.readline().strip()
-            points=np.array(point_list)[:,:cls.nbr_dims()]
+            points=loadPCD(file_name)[:,:cls.nbr_dims()]
             # points=np.insert(np.asarray(open3d.io.read_point_cloud(file_name).points),3,np.array([0]),axis=1)
 
         return cls(points.T)

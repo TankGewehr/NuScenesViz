@@ -323,6 +323,12 @@ class NuScenes:
         if curr_sample_record['prev'] == "" or sd_record['is_key_frame']:
             # If no previous annotations available, or if sample_data is keyframe just return the current ones.
             boxes = list(map(self.get_box, curr_sample_record['anns']))
+            # boxes=[]
+            # te=list(map(self.get_box, curr_sample_record['anns']))
+            # for t in te:
+            #     if self.get("sample_annotation",t.token)["visibility_token"]=="1":
+            #         continue
+            #     boxes.append(t)
 
         else:
             prev_sample_record = self.get('sample', curr_sample_record['prev'])
@@ -1274,11 +1280,12 @@ class NuScenesExplorer:
             if with_anns:
                 for box in boxes:
                     c = np.array(self.get_color(box.name)) / 255.0
-                    box.render(ax, view=np.eye(4), colors=(c, c, c))
+                    box.render(ax, view=np.eye(4), colors=(c, c, c),linewidth=1)
 
             # Limit visible range.
             ax.set_xlim(-axes_limit, axes_limit)
             ax.set_ylim(-axes_limit, axes_limit)
+            # ax.set_ylim(-axes_limit*9/16, axes_limit*9/16)
         elif sensor_modality == 'camera':
             # Load boxes and image.
             data_path, boxes, camera_intrinsic = self.nusc.get_sample_data(sample_data_token,
@@ -1296,7 +1303,7 @@ class NuScenesExplorer:
             if with_anns:
                 for box in boxes:
                     c = np.array(self.get_color(box.name)) / 255.0
-                    box.render(ax, view=camera_intrinsic, normalize=True, colors=(c, c, c))
+                    box.render(ax, view=camera_intrinsic, normalize=True, colors=(c, c, c),linewidth=1)
 
             # Limit visible range.
             ax.set_xlim(0, data.size[0])
@@ -1306,8 +1313,8 @@ class NuScenesExplorer:
             raise ValueError("Error: Unknown sensor modality!")
 
         ax.axis('off')
-        ax.set_title('{} {labels_type}'.format(
-            sd_record['channel'], labels_type='(predictions)' if lidarseg_preds_bin_path else ''))
+        # ax.set_title('{} {labels_type}'.format(
+        #     sd_record['channel'], labels_type='(predictions)' if lidarseg_preds_bin_path else ''))
         ax.set_aspect('equal')
 
         if out_path is not None:
